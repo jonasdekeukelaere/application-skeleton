@@ -473,7 +473,7 @@ class PostCreateProject
         $io = $event->getIO();
         $io->info('Dump translations`');
 
-        if (!self::testLocally('symfony')) {
+        if (!self::testCommandLocally('symfony')) {
             $io->notice('Could\'nt find symfony binary, skipping translations dump.');
             return;
         }
