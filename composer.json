@@ -52,14 +52,8 @@
         }
     },
     "scripts": {
-        "auto-scripts": [
-        ],
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ],
-        "post-create-project-cmd": "App\\Skeleton\\PostCreateProject::run"
+        "post-create-project-cmd": [
+            "@php App\\Skeleton\\PostCreateProject::run"
+        ]
     }
 }
