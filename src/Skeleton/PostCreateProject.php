@@ -472,7 +472,7 @@ class PostCreateProject
     {
         $io = $event->getIO();
         $io->info('Dump translations`');
-        var_dump(self::testCommandLocally('symfony'));
+
         if (!self::testCommandLocally('symfony')) {
             $io->notice('Could\'nt find symfony binary, skipping translations dump.');
             return;
@@ -544,26 +544,20 @@ class PostCreateProject
 
     private static function testCommandLocally(string $command): bool
     {
-        var_dump(shell_exec(sprintf("which %s", escapeshellcmd($command))));
         return shell_exec(sprintf("which %s", escapeshellcmd($command))) !== null;
     }
 
     private static function runWithNvm(string $command): bool
     {
-        if (self::checkIfFileExists('$NVM_DIR/nvm.sh')) {
+        $nvmPath = shell_exec('echo $HOME/.nvm/nvm.sh');
+
+        if (file_exists($nvmPath)) {
             $command = sprintf(
-                'source $NVM_DIR/nvm.sh && nvm use && nvm exec %s',
+                'source ' . $nvmPath . ' && nvm use && nvm exec %s',
                 $command
             );
         }
         var_dump($command);
         return shell_exec($command);
-    }
-
-    private static function checkIfFileExists(string $path): bool
-    {
-        var_dump(file_exists($path));
-        var_dump(file_exists('~/.nvm'));
-        return file_exists($path);
     }
 }
