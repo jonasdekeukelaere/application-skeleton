@@ -472,7 +472,7 @@ class PostCreateProject
     {
         $io = $event->getIO();
         $io->info('Dump translations`');
-
+        var_dump(self::testCommandLocally('symfony'));
         if (!self::testCommandLocally('symfony')) {
             $io->notice('Could\'nt find symfony binary, skipping translations dump.');
             return;
@@ -544,6 +544,7 @@ class PostCreateProject
 
     private static function testCommandLocally(string $command): bool
     {
+        var_dump(shell_exec(sprintf("which %s", escapeshellcmd($command))));
         return shell_exec(sprintf("which %s", escapeshellcmd($command))) === null;
     }
 
@@ -555,7 +556,7 @@ class PostCreateProject
                 $command
             );
         }
-
+        var_dump($command);
         return shell_exec($command);
     }
 
