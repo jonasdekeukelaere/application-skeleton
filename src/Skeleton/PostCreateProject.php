@@ -8,9 +8,17 @@ class PostCreateProject
 {
     public static function run(Event $event)
     {
-        self::dumpInitialTranslations($event);
         self::runNpmInstall($event);
+        self::installNpmPackages($event);
+        self::installFrameworkStylePackage($event);
+        self::reconfigureWebpack($event);
+        self::createAssets($event);
+        self::reconfigureApplication($event);
+        self::cleanupFiles($event);
+        self::cleanup($event);
         self::runNpmBuild($event);
+        self::findChromeAndGeckoDriver($event);
+        self::dumpInitialTranslations($event);
     }
 
     private static function runNpmInstall(Event $event): void
@@ -562,7 +570,7 @@ class PostCreateProject
                 $command
             );
         }
-        var_dump($command);
+
         return shell_exec($command);
     }
 }
