@@ -18,6 +18,7 @@ class PostCreateProject
         self::cleanupFiles($event);
         self::cleanup($event);
         self::runNpmBuild($event);
+        self::dumpInitialTranslations($event);
         self::findChromeAndGeckoDriver($event);
     }
 
@@ -486,6 +487,22 @@ class PostCreateProject
         }
     }
 
+    private static function dumpInitialTranslations(Event $event): void
+    {
+        $io = $event->getIO();
+        $io->info('Dump translations`');
+
+        if (!self::testLocally('symfony')) {
+            $io->notice('Could\'nt find symfony binary, skipping translations dump.');
+            return;
+        }
+
+        $output = shell_exec('symfony console translation:update nl --force --output-format yaml');
+        if ($io->isVerbose()) {
+            $io->write($output);
+        }
+    }
+
     // some helper methods
     private static function insertStringAtPosition(string $content, int $position, string $insert): string
     {
@@ -542,5 +559,10 @@ class PostCreateProject
         if ($io->isVerbose()) {
             $io->write($output);
         }
+    }
+
+    private static function testLocally($command): bool
+    {
+        return shell_exec(sprintf("which %s", escapeshellcmd($command))) === null;
     }
 }
