@@ -8,41 +8,9 @@ class PostCreateProject
 {
     public static function run(Event $event)
     {
-        $io = $event->getIO();
-        $io->info('Dump translations`');
-        var_dump('which symfony');
-        if (!self::testLocally('symfony')) {
-            $io->notice('Could\'nt find symfony binary, skipping translations dump.');
-            return;
-        }
-
-        $output = shell_exec('symfony console translation:update nl --force --output-format yaml');
-        if ($io->isVerbose()) {
-            $io->write($output);
-        }
-
-        self::runNvm($event);
-    }
-
-    private static function runNvm(Event $event): void
-    {
-        $io = $event->getIO();
-
-        $output = shell_exec('echo $PATH');
-        $io->write($output);
-
-        $io->info('Use the correct Node version from the .nvmrc file');
-
-        $output = shell_exec('nvm install');
-        var_dump($output);
-        if ($io->isVerbose()) {
-            $io->write($output);
-        }
-
-        $output = shell_exec('nvm use');
-        if ($io->isVerbose()) {
-            $io->write($output);
-        }
+        self::dumpInitialTranslations($event);
+        self::runNpmInstall($event);
+        self::runNpmBuild($event);
     }
 
     private static function runNpmInstall(Event $event): void
@@ -50,7 +18,7 @@ class PostCreateProject
         $io = $event->getIO();
         $io->info('Run `npm install`');
 
-        $output = shell_exec('npm install');
+        $output = self::runWithNvm('npm install');
         if ($io->isVerbose()) {
             $io->write($output);
         }
@@ -76,7 +44,9 @@ class PostCreateProject
             );
         }
 
-        $output = shell_exec(sprintf('npm install %1$s --save-dev', implode(' ', $packages)));
+        $command = sprintf('npm install %1$s --save-dev', implode(' ', $packages));
+        $output = self::runWithNvm($command);
+
         if ($io->isVerbose()) {
             $io->write($output);
         }
@@ -100,7 +70,10 @@ class PostCreateProject
                 )
             );
         }
-        $output = shell_exec(sprintf('npm install %1$s --save-dev', implode(' ', $packages)));
+
+        $command = sprintf('npm install %1$s --save-dev', implode(' ', $packages));
+        $output = self::runWithNvm($command);
+
         if ($io->isVerbose()) {
             $io->write($output);
         }
@@ -488,7 +461,8 @@ class PostCreateProject
         $io = $event->getIO();
         $io->info('Run `npm run build`');
 
-        $output = shell_exec('npm run build');
+        $output = self::runWithNvm('npm run build');
+
         if ($io->isVerbose()) {
             $io->write($output);
         }
@@ -568,8 +542,25 @@ class PostCreateProject
         }
     }
 
-    private static function testLocally(string $command): bool
+    private static function testCommandLocally(string $command): bool
     {
-        return shell_exec(sprintf("which %s", escapeshellcmd($command))) !== null;
+        return shell_exec(sprintf("which %s", escapeshellcmd($command))) === null;
+    }
+
+    private static function runWithNvm(string $command): bool
+    {
+        if (self::checkIfFileExists('$NVM_DIR/nvm.sh')) {
+            $command = sprintf(
+                'source $NVM_DIR/nvm.sh && nvm use && nvm exec %s',
+                $command
+            );
+        }
+
+        return shell_exec($command);
+    }
+
+    private static function checkIfFileExists(string $path): bool
+    {
+        return file_exists($path);
     }
 }
