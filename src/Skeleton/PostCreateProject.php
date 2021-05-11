@@ -545,7 +545,7 @@ class PostCreateProject
     private static function testCommandLocally(string $command): bool
     {
         var_dump(shell_exec(sprintf("which %s", escapeshellcmd($command))));
-        return shell_exec(sprintf("which %s", escapeshellcmd($command))) === null;
+        return shell_exec(sprintf("which %s", escapeshellcmd($command))) !== null;
     }
 
     private static function runWithNvm(string $command): bool
@@ -562,6 +562,8 @@ class PostCreateProject
 
     private static function checkIfFileExists(string $path): bool
     {
+        var_dump(file_exists($path));
+        var_dump(file_exists('~/.nvm'));
         return file_exists($path);
     }
 }
