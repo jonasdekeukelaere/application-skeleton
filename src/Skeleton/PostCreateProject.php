@@ -9,12 +9,19 @@ class PostCreateProject
     public static function run(Event $event)
     {
         $io = $event->getIO();
-        var_dump(self::testLocally('symfony'));
+        $io->info('Dump translations`');
+        var_dump('which symfony');
         if (!self::testLocally('symfony')) {
-            $io->write('Could\'nt find symfony binary, skipping translations dump.');
-        } else {
-            $io->write('Found');
+            $io->notice('Could\'nt find symfony binary, skipping translations dump.');
+            return;
         }
+
+        $output = shell_exec('symfony console translation:update nl --force --output-format yaml');
+        if ($io->isVerbose()) {
+            $io->write($output);
+        }
+
+        self::runNvm($event);
     }
 
     private static function runNvm(Event $event): void
@@ -27,6 +34,7 @@ class PostCreateProject
         $io->info('Use the correct Node version from the .nvmrc file');
 
         $output = shell_exec('nvm install');
+        var_dump($output);
         if ($io->isVerbose()) {
             $io->write($output);
         }
