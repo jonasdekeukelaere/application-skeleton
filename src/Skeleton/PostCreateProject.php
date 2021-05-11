@@ -549,7 +549,12 @@ class PostCreateProject
 
     private static function runWithNvm(string $command): bool
     {
-        $nvmPath = shell_exec('echo $HOME/.nvm/nvm.sh');
+        /*
+         * If we use env variables like $HOME directly in a path,
+         * it won't resolve. But if we echo it out first, we can
+         * use the absolute path from the output just fine.
+         */
+        $nvmPath = trim(shell_exec('echo $HOME/.nvm/nvm.sh'));
 
         if (file_exists($nvmPath)) {
             $command = sprintf(
