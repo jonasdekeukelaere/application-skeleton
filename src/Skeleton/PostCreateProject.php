@@ -24,9 +24,11 @@ class PostCreateProject
 
     private static function runNvm(Event $event): void
     {
-        shell_exec('echo $PATH');
-        
         $io = $event->getIO();
+
+        $output = shell_exec('echo $PATH');
+        $io->write($output);
+
         $io->info('Use the correct Node version from the .nvmrc file');
 
         $output = shell_exec('nvm install');
