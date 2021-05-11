@@ -563,6 +563,6 @@ class PostCreateProject
 
     private static function testLocally($command): bool
     {
-        return shell_exec(sprintf("which %s", escapeshellcmd($command))) === null;
+        return shell_exec(sprintf("which %s", escapeshellcmd($command))) !== null;
     }
 }
