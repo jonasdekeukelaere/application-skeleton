@@ -547,7 +547,7 @@ class PostCreateProject
         return shell_exec(sprintf("which %s", escapeshellcmd($command))) !== null;
     }
 
-    private static function runWithNvm(string $command): bool
+    private static function runWithNvm(string $command): string
     {
         /*
          * If we use env variables like $HOME directly in a path,
@@ -558,7 +558,7 @@ class PostCreateProject
 
         if (file_exists($nvmPath)) {
             $command = sprintf(
-                'source ' . $nvmPath . ' && nvm use && nvm exec %s',
+                '. ' . $nvmPath . ' && nvm use && nvm exec %s',
                 $command
             );
         }
