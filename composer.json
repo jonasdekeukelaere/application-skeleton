@@ -53,8 +53,7 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "@putenv $PATH=/usr/local/bin /usr/bin /bin /usr/sbin /sbin ~/.symfony/bin",
-            "@php App\\Skeleton\\PostCreateProject::run"
+            "App\\Skeleton\\PostCreateProject::run"
         ]
     }
 }

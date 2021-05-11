@@ -8,18 +8,13 @@ class PostCreateProject
 {
     public static function run(Event $event)
     {
-        self::runNvm($event);
-        self::runNpmInstall($event);
-        self::installNpmPackages($event);
-        self::installFrameworkStylePackage($event);
-        self::reconfigureWebpack($event);
-        self::createAssets($event);
-        self::reconfigureApplication($event);
-        self::cleanupFiles($event);
-        self::cleanup($event);
-        self::runNpmBuild($event);
-        self::dumpInitialTranslations($event);
-        self::findChromeAndGeckoDriver($event);
+        $io = $event->getIO();
+        var_dump(self::testLocally('symfony'));
+        if (!self::testLocally('symfony')) {
+            $io->write('Could\'nt find symfony binary, skipping translations dump.');
+        } else {
+            $io->write('Found');
+        }
     }
 
     private static function runNvm(Event $event): void
