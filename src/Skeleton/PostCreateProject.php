@@ -362,10 +362,10 @@ class PostCreateProject
         $content = self::insertStringAtPosition(
             $content,
             $offset,
-            implode("\n", $insert) . "\n"
+            "\n" . implode("\n", $insert) . "\n"
         );
         var_dump($offset, $content);
-        die;
+//        die;
         file_put_contents($projectDir . '/config/packages/twig.yaml', $content);
 
 
