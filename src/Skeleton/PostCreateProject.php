@@ -359,13 +359,13 @@ class PostCreateProject
             '        # mail stylesheet through the inline_css method in the base email template.',
             '        \'%kernel.project_dir%/public/\': ~',
         ];
-        var_dump($offset);
-        die;
         $content = self::insertStringAtPosition(
             $content,
             $offset,
             implode("\n", $insert) . "\n"
         );
+        var_dump($offset, $content);
+        die;
         file_put_contents($projectDir . '/config/packages/twig.yaml', $content);
 
 
