@@ -341,6 +341,7 @@ class PostCreateProject
         $content = file_get_contents($projectDir . '/config/packages/twig.yaml');
         $matches = [];
         preg_match('|twig:|smU', $content, $matches, PREG_OFFSET_CAPTURE);
+        var_dump($content, $matches);
         $offset = $matches[0][1] + mb_strlen($matches[0][0]);
         $insert = [
             '    globals:',
@@ -358,7 +359,7 @@ class PostCreateProject
             '        # mail stylesheet through the inline_css method in the base email template.',
             '        \'%kernel.project_dir%/public/\': ~',
         ];
-        var_dump($content, $offset);
+        var_dump($offset);
         die;
         $content = self::insertStringAtPosition(
             $content,
