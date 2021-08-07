@@ -8,8 +8,6 @@ class PostCreateProject
 {
     public static function run(Event $event)
     {
-        var_dump('foo');
-        die;
         self::runNpmInstall($event);
         self::installNpmPackages($event);
         self::installFrameworkStylePackage($event);
@@ -360,6 +358,8 @@ class PostCreateProject
             '        # mail stylesheet through the inline_css method in the base email template.',
             '        \'%kernel.project_dir%/public/\': ~',
         ];
+        var_dump($content, $offset);
+        die;
         $content = self::insertStringAtPosition(
             $content,
             $offset,
