@@ -115,6 +115,7 @@ class PostCreateProject
             $offset,
             "\n" . implode("\n", $insert)
         );
+        $content = str_replace("\nimport './styles/app.css';", '', $content);
 
 
         $io->notice('→ Initialize Framework JS');
@@ -341,7 +342,6 @@ class PostCreateProject
         $content = file_get_contents($projectDir . '/config/packages/twig.yaml');
         $matches = [];
         preg_match('|twig:|smU', $content, $matches, PREG_OFFSET_CAPTURE);
-        var_dump($content, $matches);
         $offset = $matches[0][1] + mb_strlen($matches[0][0]);
         $insert = [
             '    globals:',
@@ -364,8 +364,6 @@ class PostCreateProject
             $offset,
             "\n" . implode("\n", $insert) . "\n"
         );
-        var_dump($offset, $content);
-//        die;
         file_put_contents($projectDir . '/config/packages/twig.yaml', $content);
 
 
