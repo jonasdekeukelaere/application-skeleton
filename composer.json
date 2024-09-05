@@ -24,6 +24,7 @@
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": "^7.1",
         "symfony/security-bundle": "^7.1",
+        "symfony/stimulus-bundle": "^2.19",
         "symfony/validator": "^7.1",
         "symfony/web-profiler-bundle": "^7.1",
         "symfony/webpack-encore-bundle": "^2.1.1",
